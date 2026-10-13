@@ -2,13 +2,13 @@
 # PyInstaller intermediate tree, rebuilt from the spec.
 build/
 
-# dist/ is build output, except the v10 release executable which is committed
-# on purpose so a clone carries a runnable build. This negation must come after
-# the dist/* and *.exe rules below to take effect.
+# dist/ is build output, except the versioned release executables, which are
+# committed on purpose so a clone carries a runnable build. This negation must
+# come after the dist/* and *.exe rules below to take effect.
 dist/*
 *.exe
 *.pkg
-!dist/AgentChatArchiver-v10.exe
+!dist/AgentChatArchiver-v*.exe
 
 # Release bundles are build artifacts too; regenerate rather than commit.
 AgentChatArchiver-Windows*.zip

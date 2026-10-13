@@ -1,6 +1,12 @@
 # Agent 聊天记录归档器
 
+<img src="assets/logo.png" width="140" alt="图标：一个带笑脸的归档纸箱，右上角有对话气泡">
+
 一个无需第三方运行时依赖的 Windows 小工具：选择 Agent 工具后，扫描本机预设会话目录，输出单文件、可离线打开的 HTML。
+
+## v11 更新
+
+- **新增应用图标**：窗口、任务栏和打包后的 EXE 都使用同一枚图标。图标由 `make_icon.py` 用 Pillow 绘制生成（`assets/icon.ico` / `icon.png` / `logo.png`），改配色或形状后重新运行该脚本即可；应用本身仍只依赖标准库，Pillow 仅用于生成图标。
 
 ## v10 修复重点
 
@@ -61,5 +67,7 @@ python build.py v11
 ```
 
 它调用仓库里唯一的 `AgentChatArchiver.spec`（版本号通过 `ACA_NAME` 传入，因此不再需要为每个版本复制 spec），生成 `dist\AgentChatArchiver-v11.exe` 和 `AgentChatArchiver-Windows-v11.zip`，并打印两者的 SHA256。不带版本号则生成 `AgentChatArchiver.exe`。
+
+图标由 `python make_icon.py` 生成到 `assets/`（需要 Pillow，仅开发时用）；spec 会把 `assets/icon.ico` 同时作为 EXE 图标和随包数据打进可执行文件。
 
 仓库只跟踪源码、测试、README 和构建配置；`build\`、`dist\`、发布 ZIP、`__pycache__` 以及生成的归档 HTML 都在 `.gitignore` 中。行尾由 `.gitattributes` 统一（文本存 LF，`.bat` 保持 CRLF），不受本机 `core.autocrlf` 设置影响。

@@ -26,6 +26,16 @@ HOME = Path.home()
 APPDATA = Path(os.environ.get("APPDATA", HOME / "AppData/Roaming"))
 LOCALAPPDATA = Path(os.environ.get("LOCALAPPDATA", HOME / "AppData/Local"))
 
+
+def resource_path(relative):
+    """Locate a bundled data file both in a checkout and inside the frozen exe.
+
+    PyInstaller unpacks bundled data to sys._MEIPASS at run time; running from
+    source, the file simply sits next to this module.
+    """
+    base = getattr(sys, "_MEIPASS", None)
+    return Path(base) / relative if base else Path(__file__).resolve().parent / relative
+
 def _looks_like_agent_home(path):
     """A cheap marker check used to find relocated Windows profiles."""
     try:
@@ -782,11 +792,33 @@ def save_gui_state(state):
         pass
 
 
+def set_window_icon(root):
+    """Give the window the app icon; harmless if the asset is missing.
+
+    iconbitmap takes the .ico (taskbar and title bar); iconphoto also covers
+    non-Windows window managers.  Both are best-effort so a source checkout
+    without assets/ still starts.
+    """
+    try:
+        ico = resource_path("assets/icon.ico")
+        if ico.exists():
+            root.iconbitmap(default=str(ico))
+    except Exception:
+        pass
+    try:
+        png = resource_path("assets/icon.png")
+        if png.exists() and tk is not None:
+            root.iconphoto(True, tk.PhotoImage(file=str(png)))
+    except Exception:
+        pass
+
+
 class App:
     def __init__(self, root):
         self.root = root
         root.title("Agent 聊天记录归档器")
         root.geometry("780x760")
+        set_window_icon(root)
         state = load_gui_state()
         checked = set(state.get("tools") or ["Claude"])
         self.vars = {name: tk.BooleanVar(value=name in checked) for name in AGENTS}
