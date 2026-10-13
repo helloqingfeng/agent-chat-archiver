@@ -27,10 +27,26 @@ def main(argv):
     name = f"AgentChatArchiver-{version}" if version else "AgentChatArchiver"
     env = {**os.environ, "ACA_NAME": name}
 
+    # PyInstaller runs with --noconfirm, which clears dist/ before building.
+    # Older release executables are committed there, so stash them and put back
+    # any that the build removed -- otherwise building v11 silently deletes the
+    # tracked v10 binary from the working tree.
+    saved = {}
+    if DIST.is_dir():
+        for exe in DIST.glob("*.exe"):
+            if exe.name != f"{name}.exe":
+                saved[exe.name] = exe.read_bytes()
+
     subprocess.run(
         [sys.executable, "-m", "PyInstaller", "--noconfirm", "AgentChatArchiver.spec"],
         cwd=ROOT, env=env, check=True,
     )
+
+    for filename, blob in saved.items():
+        path = DIST / filename
+        if not path.exists():
+            path.write_bytes(blob)
+            print(f"restored {filename} (PyInstaller cleared dist/)")
 
     exe = DIST / f"{name}.exe"
     if not exe.is_file():
