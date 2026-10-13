@@ -1,0 +1,13 @@
+# Store every text file with LF line endings and check it out unchanged, so a
+# Windows checkout (core.autocrlf=true is set machine-wide) does not rewrite
+# line endings on every clone.  Git no longer warns about LF->CRLF on add.
+* text=auto eol=lf
+
+# cmd.exe is unreliable with LF-only batch files; keep this one CRLF.
+*.bat text eol=crlf
+
+# Binary artifacts are never line-ending converted.
+*.exe binary
+*.zip binary
+*.pkg binary
+*.pyc binary

@@ -51,3 +51,15 @@ python agent_chat_archiver.py --cli --custom E:\my-agent\sessions
 如果结果仍为 0：先查看界面扫描日志。若真实数据在日志没有出现的位置，用“添加文件夹”选中对应工具的根目录；若日志显示“拒绝访问”，请用拥有该目录权限的 Windows 账号运行，不要以另一个账号或受限沙箱运行。
 
 修改解析逻辑后，运行 `python -m unittest test_agent_chat_archiver` 可执行最小测试套件。
+
+## 开发
+
+打包只需一条命令，版本号就是文件名后缀：
+
+```bash
+python build.py v11
+```
+
+它调用仓库里唯一的 `AgentChatArchiver.spec`（版本号通过 `ACA_NAME` 传入，因此不再需要为每个版本复制 spec），生成 `dist\AgentChatArchiver-v11.exe` 和 `AgentChatArchiver-Windows-v11.zip`，并打印两者的 SHA256。不带版本号则生成 `AgentChatArchiver.exe`。
+
+仓库只跟踪源码、测试、README 和构建配置；`build\`、`dist\`、发布 ZIP、`__pycache__` 以及生成的归档 HTML 都在 `.gitignore` 中。行尾由 `.gitattributes` 统一（文本存 LF，`.bat` 保持 CRLF），不受本机 `core.autocrlf` 设置影响。
