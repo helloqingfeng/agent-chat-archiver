@@ -1,0 +1,39 @@
+# --- Build output -----------------------------------------------------------
+# PyInstaller intermediate tree and the executables it produces. Both are
+# rebuilt from the .spec files with `python -m PyInstaller <name>.spec`.
+build/
+dist/
+*.exe
+*.pkg
+
+# Release bundles are build artifacts too; regenerate rather than commit.
+AgentChatArchiver-Windows*.zip
+
+# --- Python -----------------------------------------------------------------
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# --- Generated archives -----------------------------------------------------
+# The tool writes "<sources>_<YYYYMMDD-HHMMSS>.html" into the chosen output
+# folder, appending _01, _02 on a same-second collision. Keep those out of
+# version control wherever they land, including reports/.
+*_[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][0-9][0-9].html
+*_[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][0-9][0-9]_[0-9][0-9].html
+
+# Ad-hoc scans and sample captures kept in the working tree for reference.
+test-output-v7/
+test-output-v7-packaged/
+agent-chat-archive.html
+added-agents-test.html
+test-claude.html
+
+# --- Editor / OS ------------------------------------------------------------
+.vscode/
+.idea/
+*.swp
+Thumbs.db
+desktop.ini
+.DS_Store
